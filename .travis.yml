@@ -1,0 +1,45 @@
+# edit from https://github.com/craigcitro/r-travis/blob/master/sample.travis.yml
+# Sample .travis.yml for R projects.
+#
+# See README.md for instructions, or for more configuration options,
+# see the wiki:
+#   https://github.com/craigcitro/r-travis/wiki
+
+language: c
+
+before_install:
+  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+  - chmod 755 ./travis-tool.sh
+  - ./travis-tool.sh bootstrap
+  - ./travis-tool.sh install_r devtools
+  - ./travis-tool.sh install_github klutometis/roxygen
+
+
+install:
+  - ./travis-tool.sh install_deps
+  - make -k prebuild
+
+script: ./travis-tool.sh run_tests
+
+on_failure:
+  - ./travis-tool.sh dump_logs
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+# use travis to auto-make: generate Rd and RcppExports
+after_success:
+  - git config --global user.email "jiant17@gmail.com"
+  - git config --global user.name "Jianan Tian"
+  - ./.travis.deploy.sh -s source -d master -c 'make -k prebuild'
+
+env:
+  global:
+    secure: "d2DBA/nVsUFj1sctxqm5uwsDK9nE60TgYoNduaEbAPqw7ZEAh38torfMZv4WT+bAFpni8Rr8UbthD8vsrfgpYIUW6Va4BX3l1nCRyYz2dm2taYAvshkOqS0JFW3zy1X99H3AslDvFdUuSNbU9ZqnoS/Ztuy2qBSPEdYFShlbHWo="
+
+## exclude the deploy branch from build on travis-ci
+branches:
+  except:
+    - master

@@ -1,0 +1,10 @@
+R/RcppExports.R
+src/RcppExports.cpp
+man/
+NAMESPACE
+*.o
+*.so
+*.rds
+.Rhistory
+.RData
+*.Rout
