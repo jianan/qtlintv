@@ -5,43 +5,19 @@
 Jianan Tian
 ---
 
-R/qtlintv is an [R](http://www.r-project.org) package for 
-simulating and plotting general experimental crosses.
+R/qtlintv is an [R](http://www.r-project.org) package of functions for
+a simulation study of behaviour of QTL interval in AIL and DO mice.
 
 ---
 
 ### Installation
 
-R/qtlintv is early in development and so is not yet available on
-[CRAN](http://cran.r-project.org).
-
 You can install R/qtlintv from its
-[GitHub repository](http://github.com/jianan/qtlintv). You first need to
-install the [devtools](https://github.com/hadley/devtools) package.
-
-```r
-install.packages("devtools")
-```
-
-Then install R/qtlintv using the `install_github` function in the
-[devtools](http://github.com/hadley/devtools) package.
+[GitHub repository](http://github.com/jianan/qtlintv). 
 
 ```r
 library(devtools)
 install_github("jianan/qtlintv")
-```
-
----
-
-### Vignette
-
-A vignette describing the use of the package is available from within
-R (and [also here](assets/vignettes/qtlintv.html)). Load the package
-and then use the `vignette` function.
-
-```r
-library(qtlintv)
-vignette("qtlintv", package="qtlintv")
 ```
 
 ---
