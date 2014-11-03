@@ -14,15 +14,14 @@ qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
   stopifnot(length(snp) == length(pos))
   stopifnot(nrow(out.qtl) == length(pos))
   names(pos) <- snp
+  n.pheno <- ncol(LOD)
   
-  ## LOD score at QTL position
-  wh <- which.min(abs(pos-qtl.pos))
-  qtl.lod <- LOD[wh, ]
+  LOD <- LOD[, max.lod >= lod.thr, drop=FALSE]
   max.lod <- apply(LOD, 2, max, na.rm = TRUE)
   max.pos <- pos[apply(LOD, 2, which.max)]
-
-  LOD <- LOD[, max.lod >= lod.thr, drop=FALSE]
-  intv <- matrix(NA, 8, ncol(LOD))
+  nr <- ncol(LOD)
+  
+  intv <- matrix(NA, 8, nr)
   for(i.simu in 1:ncol(LOD)){
     out.qtl$lod <- LOD[, i.simu]
     li <- qtl::lodint(out.qtl, drop=drop)
@@ -34,13 +33,14 @@ qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
                         bi.ep[c(1,nrow(bi.ep)), "pos"],
                         li.ep[c(1,nrow(li.ep)), "pos"])
   }
-  intv <- as.data.frame(t(intv))
+  intv <- t(intv)
+  intv <- cbind(intv, max.lod, max.pos)
   colnames(intv) <- c("bi.left", "bi.right",
                       "li.left", "li.right",
                       "bi.ep.left", "bi.ep.right",
-                      "li.ep.left", "li.ep.right")
+                      "li.ep.left", "li.ep.right",
+                      "maxlod","maxpos")
 
-  nr <- nrow(intv)
   width <- intv[,c(2,4,6,8)] - intv[,c(1,3,5,7)]
   cover <- (intv[,c(1,3,5,7)] - qtl.pos) <= 0 & (intv[,c(2,4,6,8)] - qtl.pos) >= 0
   res <- c(apply(cover, 2, mean), apply(cover, 2, sd)/sqrt(nr),
@@ -50,12 +50,7 @@ qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
                       sep=".")
 
   res <- c(res, lod.drop(pos, snp, LOD, qtl.pos, probs=0.95, lod.thr=lod.thr))
-  res["power"] <- mean(qtl.lod >= lod.thr)
-  
-  max.lod <- max.lod[qtl.lod >= lod.thr]
-  max.pos <- max.pos[qtl.lod >= lod.thr]
-  intv$maxpos <- max.pos
-  intv$maxlod <- max.lod
+  res["power"] <- nr/n.pheno
   res["maxlod"] <- median(max.lod)
   res["maxpos"] <- median(max.pos)
   attr(res, "intv") <- intv
