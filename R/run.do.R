@@ -4,6 +4,8 @@
 #' crossovers, randomly generate phenotypes with main QTL and minor
 #' QTLs, then run DOQTL::scanone to do QTL mapping. save LOD score as
 #' a matrix and marker infomations to result.dir.
+#'
+#' @param n.simu number of phenotypes for each qtl position
 #' 
 #' @export
 run.do <- function(method="sub2", para, i.para, j.simu, output.dir="DO.output/", result.dir=".", 
@@ -100,5 +102,5 @@ run.do <- function(method="sub2", para, i.para, j.simu, output.dir="DO.output/",
     file.remove(output.dir)
   }
   
-  return()
+  return(file.result)
 }
