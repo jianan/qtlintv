@@ -13,11 +13,13 @@ qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
   stopifnot(nrow(LOD) == length(pos))
   stopifnot(length(snp) == length(pos))
   stopifnot(nrow(out.qtl) == length(pos))
+  stopifnot(length(qtl.pos) == 1)
   names(pos) <- snp
   n.pheno <- ncol(LOD)
   
-  LOD <- LOD[, max.lod >= lod.thr, drop=FALSE]
   max.lod <- apply(LOD, 2, max, na.rm = TRUE)
+  LOD <- LOD[, max.lod >= lod.thr, drop=FALSE]
+  max.lod <- max.lod[max.lod >= lod.thr]
   max.pos <- pos[apply(LOD, 2, which.max)]
   nr <- ncol(LOD)
   
@@ -48,8 +50,9 @@ qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
   names(res) <- paste(rep(c("bi","li","bi.ep","li.ep"), 4),
                       rep(c("cover","cover.sd", "width", "width.sd"),each=4),
                       sep=".")
-
-  res <- c(res, lod.drop(pos, snp, LOD, qtl.pos, probs=0.95, lod.thr=lod.thr))
+  
+  res.loddrop <- lod.drop(pos, snp, LOD, qtl.pos, probs=0.95, lod.thr=lod.thr)
+  res <- c(res, res.loddrop)
   res["power"] <- nr/n.pheno
   res["maxlod"] <- median(max.lod)
   res["maxpos"] <- median(max.pos)
