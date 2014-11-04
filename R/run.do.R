@@ -5,12 +5,13 @@
 #' QTLs, then run DOQTL::scanone to do QTL mapping. save LOD score as
 #' a matrix and marker infomations to result.dir.
 #'
-#' @param n.simu number of phenotypes for each qtl position
+#' @param n.simu number of phenotypes for each qtl position. suggested
+#' to be 1, otherwise the result will be correlated.
 #' 
 #' @export
 run.do <- function(method="sub2", para, i.para, j.simu, output.dir="DO.output/", result.dir=".", 
                    ## n.gen, n.kids, n.sample, h.qtl, h.kin, allele.freq, seed,
-                   n.simu=10, qtl.chr=1, ochr=2:19, n.mqtl=10, 
+                   n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10, 
                    map.whole, qtl.allpos, f.geno.chr, snps, 
                    write.gp36=FALSE, cleanup=TRUE){
 
