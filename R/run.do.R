@@ -45,17 +45,24 @@ run.do <- function(method="sub2", para, i.para, j.simu, output.dir="DO.output/",
   id <- attr(ped, "last.gen.id")
   attr(ped, "last.gen.id") <- NULL
 
-  cat("Simulating genotypes...  \n")
-  xodat <- sim_from_pedigree_wholechr(pedigree=ped, map.whole)
+  while(1){
+    cat("Simulating genotypes...  \n")
+    xodat <- sim_from_pedigree_wholechr(pedigree=ped, map.whole)
+
+    cat("Generating phenotypes...  \n")
+    ## for each qtl position, generate multiple phenotypes, result is a matrix of n.sample x (n.simu*n.qtlpos)
+    pheno <- gen_pheno_do_allqtl(xodat, map.whole, id,
+                                 qtl.chr, qtl.allpos, allele,
+                                 h.qtl, h.kin, n.mqtl, n.simu)
+
+    min.sd <- min(apply(pheno, 2, sd))
+    if(is.na(pheno[1,1]) | is.na(min.sd) | min.sd<0){
+      cat("QTL has single genotype, re-do simulation of genotypes... \n")
+    } else break
+  }
 
   cat("Preparing for DOQTL::calc.genoprob...  \n")  
   result <- prep_data_founders_chr(ped, xodat, map.whole, id, f.geno.chr, qtl.chr)
-
-  cat("Generating phenotypes...  \n")  
-  ## for each qtl position, generate multiple phenotypes, result is a matrix of n.sample x (n.simu*n.qtlpos)
-  pheno <- gen_pheno_do_allqtl(xodat, map.whole, id, 
-                               qtl.chr, qtl.allpos, allele, 
-                               h.qtl, h.kin, n.mqtl, n.simu)
 
   cat("Calculating Kinship matrix...  \n")  
   nm.ochr <- sum(unlist(lapply(map.whole[ochr], length)))
@@ -66,7 +73,6 @@ run.do <- function(method="sub2", para, i.para, j.simu, output.dir="DO.output/",
   save(pheno, K, snps, file=paste0(output.dir, "pheno.K.snps.RData"))
 
   rm(xodat, f.geno.chr, f.genoAH, genoAH)
-  stopifnot(min(apply(pheno, 2, sd)) > 0)
 
   ########################################################################
   cat("Calculating genoprob...  \n")  
