@@ -32,7 +32,8 @@ run.do <- function(method="sub2", para, i.para, j.simu, output.dir="DO.output/",
   seed <- para$seed[i.para]
   
   set.seed(seed)
-  seeds <- runif(100, 0, 1e+8)
+  n.seeds <- ifelse(j.simu <= 100, 100, 1e+8)
+  seeds <- runif(n.seeds, 0, 1e+8)
   set.seed(seeds[j.simu])
   allele <- 1:allele.freq
 
