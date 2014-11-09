@@ -15,16 +15,18 @@ qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
   stopifnot(nrow(out.qtl) == length(pos))
   stopifnot(length(qtl.pos) == 1)
   names(pos) <- snp
+
+  LOD <- LOD[, !apply(is.na(LOD), 2, any), drop=FALSE] ## remove the column with NAs.
   n.pheno <- ncol(LOD)
   
   max.lod <- apply(LOD, 2, max, na.rm = TRUE)
-  LOD <- LOD[, max.lod >= lod.thr, drop=FALSE]
+  LOD <- LOD[, max.lod >= lod.thr, drop=FALSE] ## remove the column with small LOD score.
   max.lod <- max.lod[max.lod >= lod.thr]
   max.pos <- pos[apply(LOD, 2, which.max)]
   nr <- ncol(LOD)
   
   intv <- matrix(NA, 8, nr)
-  for(i.simu in 1:ncol(LOD)){
+  for(i.simu in 1:nr){
     out.qtl$lod <- LOD[, i.simu]
     li <- qtl::lodint(out.qtl, drop=drop)
     bi <- qtl::bayesint(out.qtl)
