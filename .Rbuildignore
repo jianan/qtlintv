@@ -1,7 +1,7 @@
 \.git/
 ^\.gitignore$
 ^\.travis\.yml$
-^\.travis\.deplot\.sh$
+^\.travis\.deploy\.sh$
 ^ReadMe\.md$
 ^Makefile$
 ^\.Rhistory$
