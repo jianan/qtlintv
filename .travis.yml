@@ -13,7 +13,8 @@ before_install:
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_r devtools
   - ./travis-tool.sh install_github klutometis/roxygen
-
+  - ./travis-tool.sh install_github jianan/simcross
+  - ./travis-tool.sh install_github jianan/DOQTL
 
 install:
   - ./travis-tool.sh install_deps
