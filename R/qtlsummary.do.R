@@ -8,8 +8,6 @@
 qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
   ## to-do: write functions to calc bayesint and lodint for 100 phenos at one time.
   
-  require(qtl)
-
   stopifnot(nrow(LOD) == length(pos))
   stopifnot(length(snp) == length(pos))
   stopifnot(nrow(out.qtl) == length(pos))

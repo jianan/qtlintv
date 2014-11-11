@@ -5,9 +5,10 @@ Authors@R: "Jianan Tian <tian@stat.wisc.edu> [aut, cre]"
 Description: functions for a simulation study of behaviour of QTL interval in
     AIL and DO mice.
 Depends:
-    R (>= 3.1.0),
-    qtl,
+    R (>= 3.1.0)
+Imports:
+    qtl (>= 1.32),
     simcross (>= 0.2-10),
-    DOQTL
+    DOQTL (>= 1.0),
 License: GPL-3
 LazyData: true
