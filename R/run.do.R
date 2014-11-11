@@ -14,10 +14,6 @@ run.do <- function(method="sub2", para, i.para, j.simu, output.dir="DO.output/",
                    n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10, 
                    map.whole, qtl.allpos, f.geno.chr, snps, 
                    write.gp36=FALSE, cleanup=TRUE){
-
-  require(qtl)
-  require(simcross)
-  require(DOQTL)
   
   if(!file.exists(output.dir))   dir.create(output.dir)
   if(!file.exists(result.dir))   dir.create(result.dir)
