@@ -37,7 +37,7 @@ after_success:
 
 env:
   global:
-    secure: "d2DBA/nVsUFj1sctxqm5uwsDK9nE60TgYoNduaEbAPqw7ZEAh38torfMZv4WT+bAFpni8Rr8UbthD8vsrfgpYIUW6Va4BX3l1nCRyYz2dm2taYAvshkOqS0JFW3zy1X99H3AslDvFdUuSNbU9ZqnoS/Ztuy2qBSPEdYFShlbHWo="
+    secure: "Ip3FREnjN059+vXg4IeON+E/az+cuKrP/NjRR72cUoYeXPKnpa6V4//T62Dg5YKmKhQe4HdVQDamMmlqn4e7Bc/jBfelj4/hGY6MQOlESpYKtGB8VRZKQrHoKXhnfEnNRYVwM78XVLFXu5zD4OnuKFIg8lXu5ssk4kHddN6Okfw="
 
 ## exclude the deploy branch from build on travis-ci
 branches:

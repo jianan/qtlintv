@@ -1,1 +1,7 @@
+\.git/
+^\.gitignore$
 ^\.travis\.yml$
+^\.travis\.deplot\.sh$
+^ReadMe\.md$
+^Makefile$
+^\.Rhistory$
