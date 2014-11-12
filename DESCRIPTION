@@ -1,7 +1,8 @@
 Package: qtlintv
 Title: QTL interval estimation
 Version: 0.1
-Authors@R: "Jianan Tian <tian@stat.wisc.edu> [aut, cre]"
+Author: Jianan Tian <tian@stat.wisc.edu>
+Maintainer: Jianan Tian <tian@stat.wisc.edu>
 Description: functions for a simulation study of behaviour of QTL interval in
     AIL and DO mice.
 Depends:
@@ -9,6 +10,6 @@ Depends:
 Imports:
     qtl (>= 1.32),
     simcross (>= 0.2-10),
-    DOQTL (>= 1.0),
+    DOQTL (>= 1.0)
 License: GPL-3
 LazyData: true

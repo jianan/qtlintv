@@ -36,9 +36,9 @@ run.do <- function(method="sub2", para, i.para, j.simu, output.dir="DO.output/",
   tic <- proc.time() ## starting time
   
   cat("Simulating DO Pedigree... \n")
-  ped <- sim_do_pedigree_fix_n(ngen=n.gen, nkids=n.kids, nccgen=n.ccgen,
-                               nsample=n.sample, npairs_small=30, npairs_big=300,
-                               method=method, design="random")
+  ped <- simcross::sim_do_pedigree_fix_n(ngen=n.gen, nkids=n.kids, nccgen=n.ccgen,
+                                         nsample=n.sample, npairs_small=30, npairs_big=300,
+                                         method=method, design="random")
   id <- attr(ped, "last.gen.id")
   attr(ped, "last.gen.id") <- NULL
 
