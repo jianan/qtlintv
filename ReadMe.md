@@ -1,6 +1,6 @@
 ## [R/qtlintv](https://github.com/jianan/qtlintv)
 
-[![Build Status](https://travis-ci.org/jianan/qtlintv.png?branch=master)](https://travis-ci.org/jianan/qtlintv)
+[![Build Status](https://travis-ci.org/jianan/qtlintv.png?branch=source)](https://travis-ci.org/jianan/qtlintv)
 
 Jianan Tian
 ---
