@@ -10,7 +10,7 @@ get_minor_qtl <- function(xodat, id, map, n.mqtl, qtl.chr){
   chrs <- names(map)
   chrs <- chrs[chrs!=qtl.chr & chrs!="X"]
   mqtl.chr <- sample(chrs, size=n.mqtl, replace=TRUE)
-  mqtl.pos <- lapply(map[mqtl.chr], sample, size=1)
+  mqtl.pos <- sapply(map[mqtl.chr], sample, size=1)
   mqtl.geno <- matrix(NA, length(id), n.mqtl)
   for(i in 1:n.mqtl){
     mqtl.geno[, i] <- get_qtl_geno(xodat, id, mqtl.chr[i], mqtl.pos[i])
