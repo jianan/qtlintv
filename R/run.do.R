@@ -9,7 +9,7 @@
 #' to be 1, otherwise the result will be correlated.
 #' 
 #' @export
-run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="DO.output/", result.dir=".", 
+run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="DO.output/", result.dir="./", 
                    ## n.gen, n.kids, n.sample, h.qtl, h.kin, allele.freq, seed,
                    n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10, 
                    map.whole, qtl.allpos, f.geno.chr, snps, design=c("nosib", "random"),
