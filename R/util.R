@@ -53,6 +53,7 @@ scanone_do2qtl <- function(qtl, include.x=FALSE){
 
 ##' generate a mice genetic map with one gape region on CHR  
 ##' @param n.mar.cM Number of markers per cM
+##' @export
 gen_map <- function(n.mar.cM, gap.chr=1, gap.start=40, gap.end=60,
                     anchor.tel=TRUE, include.x=FALSE, sex.sp=FALSE, eq.spacing=FALSE){
 
