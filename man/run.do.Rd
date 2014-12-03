@@ -4,19 +4,48 @@
 \alias{run.do}
 \title{run simulations for DO type experiments}
 \usage{
-run.do(method = "sub2", para, i.para, j.simu, output.dir = "DO.output/",
-  result.dir = ".", n.simu = 1, qtl.chr = 1, ochr = 2:19, n.mqtl = 10,
-  map.whole, qtl.allpos, f.geno.chr, snps, write.gp36 = FALSE,
-  cleanup = TRUE)
+run.do(method = c("sub2", "last2"), para, i.para, j.simu,
+  output.dir = "DO.output/", result.dir = "./", n.simu = 1, qtl.chr = 1,
+  ochr = 2:19, n.mqtl = 10, map.whole, qtl.allpos, f.geno.chr, snps,
+  design = c("nosib", "random"), write.gp36 = FALSE, cleanup = TRUE)
 }
 \arguments{
+\item{method}{design method for the pedigree, choose from 'sub2' or 'last2'.}
+
+\item{para}{data.frame that saves all the parameter settings for the simulation}
+
+\item{i.para}{which setting to use for the current run}
+
+\item{j.simu}{which simulation is the currtent run at}
+
 \item{n.simu}{number of phenotypes for each qtl position. suggested
 to be 1, otherwise the result will be correlated.}
+
+\item{qtl.chr}{chromosome for the qtl}
+
+\item{ochr}{chromosomes other than qtl.chr, used to estimate kinship matrix}
+
+\item{n.mqtl}{number of minor qtls for the polygenic effects}
+
+\item{map.whole}{genetic map for all chromosomes}
+
+\item{qtl.allpos}{named vector of all candidate qtl positions.}
+
+\item{f.geno.chr}{founder genotype for QTL chromosome.}
+
+\item{snps}{SNP information saved in a data.frame: name, chr and
+position. Only for SNPs on the QTL chromosome.}
+
+\item{design}{'nosib' or 'random'}
+
+\item{write.gp36}{logic value}
+
+\item{cleanup}{logic value}
 }
 \description{
 For a fix set of parameters, generate DO pedigree and simulate
 crossovers, randomly generate phenotypes with main QTL and minor
 QTLs, then run DOQTL::scanone to do QTL mapping. save LOD score as
-a matrix and marker infomations to result.dir.
+a matrix and marker informations to result.dir.
 }
 

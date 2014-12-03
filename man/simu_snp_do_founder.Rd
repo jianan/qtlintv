@@ -8,9 +8,9 @@ pattern as the real snps.}
 simu_snp_do_founder(n.snp, p.missing = 0.03, f.geno)
 }
 \arguments{
-\item{p.missing}{proportion of missing data in the result}
+\item{n.snp}{Number of snps needed}
 
-\item{f.geno}{Number of snps needed}
+\item{p.missing}{proportion of missing data in the result}
 
 \item{f.geno}{founder genotype at all snps}
 }
