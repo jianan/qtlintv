@@ -3,10 +3,25 @@
 #' For a fix set of parameters, generate DO pedigree and simulate
 #' crossovers, randomly generate phenotypes with main QTL and minor
 #' QTLs, then run DOQTL::scanone to do QTL mapping. save LOD score as
-#' a matrix and marker infomations to result.dir.
+#' a matrix and marker informations to result.dir.
 #'
+#' @param method design method for the pedigree, choose from 'sub2' or 'last2'.
+#' @param para data.frame that saves all the parameter settings for the simulation
+#' @param i.para which setting to use for the current run
+#' @param j.simu which simulation is the currtent run at
 #' @param n.simu number of phenotypes for each qtl position. suggested
 #' to be 1, otherwise the result will be correlated.
+#' @param qtl.chr chromosome for the qtl
+#' @param ochr chromosomes other than qtl.chr, used to estimate kinship matrix
+#' @param n.mqtl number of minor qtls for the polygenic effects
+#' @param map.whole genetic map for all chromosomes
+#' @param qtl.allpos named vector of all candidate qtl positions.
+#' @param f.geno.chr founder genotype for QTL chromosome.
+#' @param snps SNP information saved in a data.frame: name, chr and
+#' position. Only for SNPs on the QTL chromosome.
+#' @param design 'nosib' or 'random'
+#' @param write.gp36 logic value
+#' @param cleanup logic value
 #' 
 #' @export
 run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="DO.output/", result.dir="./", 

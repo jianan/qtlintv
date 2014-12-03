@@ -1,6 +1,6 @@
 #' create fake snps for DO founders, while keeping the same allele
 #' pattern as the real snps.
-#' @param f.geno Number of snps needed
+#' @param n.snp Number of snps needed
 #' @param f.geno founder genotype at all snps
 #' @param p.missing proportion of missing data in the result
 #' @return A n.snp x 8 matrix with values "A", "T", "G", "C" for
