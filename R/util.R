@@ -36,12 +36,12 @@ scanone_rel2qtl <- function(dat){
 scanone_do2qtl <- function(qtl, include.x=FALSE){
   chr <- qtl$lod$A[,2]
   pos <- qtl$lod$A[,4]
-  lod <- qtl$lod$A$neg.log10.p * 2
+  lod <- qtl$lod$A$lod
   snp.id <- qtl$lod$A[,1]
   if(include.x){
     chr <- c(chr, qtl$lod$X[,2])
     pos <- c(pos, qtl$lod$X[,4])
-    lod <- c(lod, qtl$lod$X$neg.log10.p * 2)
+    lod <- c(lod, qtl$lod$X$lod)
     snp.id <- c(snp.id, qtl$lod$X[,1])
   }
   out.qtl <- data.frame(chr=chr, pos=pos, lod=lod,
