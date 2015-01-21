@@ -9,7 +9,7 @@
 #' @inheritParams run.do
 #' 
 #' @export
-run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, result.dir="./", 
+run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, n.mar.cM=2, result.dir="./", 
                     qtl.chr=1, ochr=2:19, n.mqtl=10, design=c("nosib", "random")){
   
   method <- match.arg(method)
@@ -17,7 +17,7 @@ run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, result.dir=
   
   if(!file.exists(result.dir))   dir.create(result.dir)
 
-  stopifnot(colnames(para) == c())
+  stopifnot(colnames(para) == c("n.gen","n.kids","n.sample","h.qtl","h.kin","qtl.pos","seed"))
   ## load("para.do.real.RData")
   n.gen <- para$n.gen[i.para]
   n.kids <- para$n.kids[i.para]

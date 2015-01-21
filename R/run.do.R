@@ -26,7 +26,7 @@
 #' @export
 run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="DO.output/", result.dir="./", 
                    ## n.gen, n.kids, n.sample, h.qtl, h.kin, allele.freq, seed,
-                   n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10, 
+                   n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10, n.ccgen=15, npairs_small=30, npairs_big=300,
                    map.whole, qtl.allpos, f.geno.chr, snps, design=c("nosib", "random"),
                    write.gp36=FALSE, cleanup=TRUE){
   
@@ -55,7 +55,7 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   
   cat("Simulating DO Pedigree... \n")
   ped <- simcross::sim_do_pedigree_fix_n(ngen=n.gen, nkids=n.kids, nccgen=n.ccgen,
-                                         nsample=n.sample, npairs_small=30, npairs_big=300,
+                                         nsample=n.sample, npairs_small=npairs_small, npairs_big=nparis_big,
                                          method=method, design=design)
   id <- attr(ped, "last.gen.id")
   attr(ped, "last.gen.id") <- NULL
