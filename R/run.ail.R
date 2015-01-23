@@ -64,12 +64,16 @@ run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, n.mar.cM=2,
     ## generate positions for mapping
     pseudo.pos <- seq(from=max(0, gap.start-gap.len/2),
                       to=min(max(map[[qtl.chr]]), gap.end+gap.len/2), by=step)
+    if(!(qtl.pos %in% mapdf.chr$dist | qtl.pos %in% pseudo.pos)){
+      ## makesure that the QTLs themself are marker/pseudomarkers.
+      pseudo.pos <- c(pseduo.pos, qtl.allpos)
+    }
     pos <- data.frame(snp=paste0("c", qtl.chr, ".loc", 1:length(pseudo.pos)),
                       chr=qtl.chr, dist=pseudo.pos)
     index <- pos$dist %in% mapdf.chr$dist   ## remove duplicate pesudo-marker.
     pos <- rbind(pos[!index, ], mapdf.chr)
     pos <- pos[order(pos$dist), ]
-    
+
     ## init LOD matrix
     if(i.simu == 1) LOD <- matrix(NA, nrow(pos), n.simu)
 

@@ -32,6 +32,9 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   
   method <- match.arg(method)
   design <- match.arg(design)
+
+  ## check that the QTLs themself are marker/pseudomarkers.
+  stopifnot(all(qtl.allpos %in% snps$dist))
   
   if(!file.exists(output.dir))   dir.create(output.dir)
   if(!file.exists(result.dir))   dir.create(result.dir)
