@@ -24,11 +24,11 @@ get_minor_qtl_do <- function(xodat, id, map, n.mqtl, qtl.chr){
 #'
 #' Add main qtl effect for a fixed qtl and multiple small effect QTLs
 #' randomly selected from chr 2-19.
-#' 
+#'
 #' @export
 gen_pheno_do <- function(xodat, map, id, qtl.chr, qtl.pos, allele,
                          h.qtl=0.3, h.kin=0.1, n.mqtl=10){
-  
+
   ## get genotype at QTL
   qtlgeno <- get_qtl_geno_do(xodat, id, qtl.chr, qtl.pos, allele)
   mqtl.geno <- get_minor_qtl_do(xodat, id, map, n.mqtl, qtl.chr)
@@ -39,7 +39,7 @@ gen_pheno_do <- function(xodat, map, id, qtl.chr, qtl.pos, allele,
   ## generate phenotype
   n <- length(id)
   y.qtl <- qtlgeno
-  s.qtl <- sqrt(h.qtl/(1-h.qtl-h.kin)/var(y.qtl)) 
+  s.qtl <- sqrt(h.qtl/(1-h.qtl-h.kin)/var(y.qtl))
   y.kin <- c(mqtl.geno %*% mqtl.eff)
   s.kin <- sqrt(h.kin/(1-h.qtl-h.kin)/var(y.kin))
   pheno <- s.qtl * y.qtl + s.kin * y.kin + rnorm(n)
@@ -54,7 +54,7 @@ gen_pheno_do <- function(xodat, map, id, qtl.chr, qtl.pos, allele,
 #' returns a matrix of size n x \code{n_qtl*n.simu}
 #'
 #' @export
-gen_pheno_do_allqtl <- function(xodat, map, id, qtl.chr, qtl.allpos, allele, 
+gen_pheno_do_allqtl <- function(xodat, map, id, qtl.chr, qtl.allpos, allele,
                                 h.qtl=0.3, h.kin=0.1, n.mqtl=10, n.simu=1){
 
   ## get genotype at QTL

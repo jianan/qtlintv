@@ -2,16 +2,16 @@
 #'
 #' generate list 'data' and 'founders' from simulated DO pedigree and
 #' crossovers.
-#' 
+#'
 #' @export
 prep_data_founders <- function(ped, xodat, map, id, f.geno){
-  
+
   geno <- convert2geno_wholechr(xodat, map, id, f.geno)
   sex <- ifelse(ped[id, "sex"]==1, "M", "F")
   gen <- paste0(ifelse(ped[id,"do"]==1, "DO", "CC"), ped[id, "gen"])
   gen[substr(gen,1,2)=="CC"] <- "CC"
   rownames(geno) <- names(sex) <- names(gen) <- paste0("id.", ped[id, "id"])
-  
+
   founder.ped <- ped[ped[, "gen"] %in% c(0, 1) & ped[, "do"]==0, ]
   founder.sex <- ifelse(founder.ped[, "sex"]==1, "M", "F")
   founder.id <- founder.ped[, "id"]
@@ -40,7 +40,7 @@ prep_data_founders <- function(ped, xodat, map, id, f.geno){
 #'
 #' generate list 'data' and 'founders' from simulated DO pedigree and
 #' crossovers for a chromosome.
-#' 
+#'
 #' @export
 prep_data_founders_chr <- function(ped, xodat, map, id, f.geno, chr){
   f.geno.chr <- f.geno[names(map[[chr]]),]

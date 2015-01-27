@@ -27,4 +27,3 @@ jitter.map <- function(map, eps=1e-6){
 ## }
 ## n.same2 <- c(unlist(lapply(map.whole, function(x) max(table(x)))))
 ## all(abs(n.same - n.same2) < 0.5)
-

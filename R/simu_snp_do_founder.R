@@ -5,12 +5,12 @@
 #' @param p.missing proportion of missing data in the result
 #' @return A n.snp x 8 matrix with values "A", "T", "G", "C" for
 #' alleles and "N" for missing data.
-#' 
+#'
 #' @export
 simu_snp_do_founder <- function(n.snp, p.missing=0.03, f.geno){
 
   if(missing(p.missing)) p.missing <- mean(f.geno=="N")
-  
+
   pattern <- matrix(NA, nrow(f.geno), 8)
   pattern <- apply(f.geno, 1, function(x){paste0(as.numeric(x==x[1]), collapse="")})
   x <- table(pattern)
@@ -43,10 +43,10 @@ simu_snp_do_founder <- function(n.snp, p.missing=0.03, f.geno){
     f.geno.new[i, ind.1] <- g1
     f.geno.new[i, !ind.1] <- g2
   }
-  
+
   ## add missing values "N"
   f.geno.new[sample(1:(n.snp*8), size=n.snp*8*p.missing)] <- "N"
   if(n.snp == nrow(f.geno)) rownames(f.geno.new) <- rownames(f.geno)
-  
+
   return(f.geno.new)
 }
