@@ -19,9 +19,9 @@ get_minor_qtl <- function(xodat, id, map, n.mqtl, qtl.chr){
 }
 
 #' generate pheno for ail data
-#' 
+#'
 #' @export
-gen_pheno_ail<- function(xodat, map, id, qtl.chr, qtl.pos, 
+gen_pheno_ail<- function(xodat, map, id, qtl.chr, qtl.pos,
                          h.qtl=0.3, h.kin=0.1, n.mqtl=10){
 
   ## get genotype at QTL
@@ -34,7 +34,7 @@ gen_pheno_ail<- function(xodat, map, id, qtl.chr, qtl.pos,
   ## generate phenotype
   n <- length(id)
   y.qtl <- qtlgeno
-  s.qtl <- sqrt(h.qtl/(1-h.qtl-h.kin)/var(y.qtl)) 
+  s.qtl <- sqrt(h.qtl/(1-h.qtl-h.kin)/var(y.qtl))
   y.kin <- c(mqtl.geno %*% mqtl.eff)
   s.kin <- sqrt(h.kin/(1-h.qtl-h.kin)/var(y.kin))
   pheno <- s.qtl * y.qtl + s.kin * y.kin + rnorm(n)

@@ -1,10 +1,8 @@
 #' LOD-drop for lod support interval to reach {95\%} coverage rate.
 #'
-#' LOD-drop for lod support interval to reach {95\%} coverage rate.
-#' 
 #' @export
 lod.drop <- function(pos, snp, LOD, qtl.pos, probs=0.95, lod.thr=3, eps=1e-8){
-  
+
   n.phenos <- ncol(LOD)
   colnames(LOD) <- 1:n.phenos
   rownames(LOD) <- snp
@@ -21,7 +19,7 @@ lod.drop <- function(pos, snp, LOD, qtl.pos, probs=0.95, lod.thr=3, eps=1e-8){
   mn.left <- names(candi.pos)[which.max(candi.pos)]
   candi.pos <- pos.marker[pos.marker - qtl.pos > +eps]
   mn.right <- names(candi.pos)[which.min(candi.pos)]
-  
+
   qtl.lod.marker <- numeric(n.phenos)
   for(j in 1:n.phenos){
     if(max.pos[j] <= pos[mn.left]){
@@ -32,7 +30,7 @@ lod.drop <- function(pos, snp, LOD, qtl.pos, probs=0.95, lod.thr=3, eps=1e-8){
       qtl.lod.marker[j] <- max.lod[j]
     }
   }
-  
+
   lod.drop1 <- max.lod - qtl.lod
   lod.drop2 <- max.lod - qtl.lod.marker
   lod.drop <- apply(cbind(lod.drop1, lod.drop2), 1, min)

@@ -1,5 +1,5 @@
 #' run simulations for DO type experiments
-#' 
+#'
 #' For a fix set of parameters, generate DO pedigree and simulate
 #' crossovers, randomly generate phenotypes with main QTL and minor
 #' QTLs, then run DOQTL::scanone to do QTL mapping. save LOD score as
@@ -22,20 +22,20 @@
 #' @param design 'nosib' or 'random'
 #' @param write.gp36 logic value
 #' @param cleanup logic value
-#' 
+#'
 #' @export
-run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="DO.output/", result.dir="./", 
+run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="DO.output/", result.dir="./",
                    ## n.gen, n.kids, n.sample, h.qtl, h.kin, allele.freq, seed,
                    n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10, n.ccgen=15, npairs_small=30, npairs_big=300,
                    map.whole, qtl.allpos, f.geno.chr, snps, design=c("nosib", "random"),
                    write.gp36=FALSE, cleanup=TRUE){
-  
+
   method <- match.arg(method)
   design <- match.arg(design)
 
   ## check that the QTLs themself are marker/pseudomarkers.
   stopifnot(all(qtl.allpos %in% snps$dist))
-  
+
   if(!file.exists(output.dir))   dir.create(output.dir)
   if(!file.exists(result.dir))   dir.create(result.dir)
 
@@ -47,7 +47,7 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   h.kin <- para$h.kin[i.para]
   allele.freq <- para$allele.freq[i.para]
   seed <- para$seed[i.para]
-  
+
   set.seed(seed)
   n.seeds <- ifelse(j.simu <= 100, 100, 1e+8)
   seeds <- runif(n.seeds, 0, 1e+8)
@@ -55,10 +55,10 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   allele <- 1:allele.freq
 
   tic <- proc.time() ## starting time
-  
+
   cat("Simulating DO Pedigree... \n")
   ped <- simcross::sim_do_pedigree_fix_n(ngen=n.gen, nkids=n.kids, nccgen=n.ccgen,
-                                         nsample=n.sample, npairs_small=npairs_small, npairs_big=nparis_big,
+                                         nsample=n.sample, npairs_small=npairs_small, npairs_big=npairs_big,
                                          method=method, design=design)
   id <- attr(ped, "last.gen.id")
   attr(ped, "last.gen.id") <- NULL
@@ -79,10 +79,10 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
     } else break
   }
 
-  cat("Preparing for DOQTL::calc.genoprob...  \n")  
+  cat("Preparing for DOQTL::calc.genoprob...  \n")
   result <- prep_data_founders_chr(ped, xodat, map.whole, id, f.geno.chr, qtl.chr)
 
-  cat("Calculating Kinship matrix...  \n")  
+  cat("Calculating Kinship matrix...  \n")
   nm.ochr <- sum(unlist(lapply(map.whole[ochr], length)))
   f.genoAH <- matrix(LETTERS[1:8], nrow=nm.ochr, 8, byrow=TRUE)
   genoAH <- convert2geno_wholechr(xodat[ochr], map.whole[ochr], id, f.genoAH)
@@ -93,7 +93,7 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   rm(xodat, f.geno.chr, f.genoAH, genoAH)
 
   ########################################################################
-  cat("Calculating genoprob...  \n")  
+  cat("Calculating genoprob...  \n")
   DOQTL::calc.genoprob(data=result$data, chr = qtl.chr, output.dir = output.dir,
                        plot = FALSE, array="other", sampletype="DO",
                        method="allele", snps=snps, founders=result$founders,
@@ -117,7 +117,7 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   colnames(LOD) <- colnames(pheno)
 
   toc <- proc.time() - tic ## run time
-  
+
   file.result <- paste0(result.dir, "result.para.", i.para, ".simu.", j.simu, ".RData")
   save(qtl.allpos, pos, snp, LOD, out, toc, file=file.result)
 
@@ -126,6 +126,6 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
     if(length(files)>0)  file.remove(paste0(output.dir, "/", files))
     file.remove(output.dir)
   }
-  
+
   return(file.result)
 }

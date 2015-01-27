@@ -1,7 +1,7 @@
 #' @export
 map_df2list <- function(snps){
   stopifnot(!any(is.na(match(c("snp", "chr", "dist"), names(snps) ))))
-  
+
   chrs <- unique(snps$chr)
   ## chrs <- c(1:19, "X")
   map <- NULL
@@ -51,15 +51,15 @@ scanone_do2qtl <- function(qtl, include.x=FALSE){
   out.qtl
 }
 
-##' generate a mice genetic map with one gape region on CHR  
+##' generate a mice genetic map with one gape region on CHR
 ##' @param n.mar.cM Number of markers per cM
 ##' @export
 gen_map <- function(n.mar.cM, gap.chr=1, gap.start=40, gap.end=60,
                     anchor.tel=TRUE, include.x=FALSE, sex.sp=FALSE, eq.spacing=FALSE){
 
   ## Chr length from snps in megamuga
-  chr.len <- c(100, 104, 83, 89, 91, 80, 90, 77, 76, 78, 89, 64, 
-               68, 67, 60, 58, 62, 60, 57, 80) 
+  chr.len <- c(100, 104, 83, 89, 91, 80, 90, 77, 76, 78, 89, 64,
+               68, 67, 60, 58, 62, 60, 57, 80)
   names(chr.len) <- c(1:19, "X")
   if(!include.x) chr.len <- chr.len[1:19]
   chr.n.mar <- chr.len * n.mar.cM + 1
@@ -79,4 +79,3 @@ addblank <- function(map, chr, gap.start, gap.end){
   map[[chr]] <- x
   return(map)
 }
-

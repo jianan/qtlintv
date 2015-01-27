@@ -1,13 +1,13 @@
 #' summarize of do simulation results
 #'
 #' take LOD score and marker infomation, return coverage and interval
-#' width for LOD support interval, Bayes interval, lod.drop and so on. 
-#' 
+#' width for LOD support interval, Bayes interval, lod.drop and so on.
+#'
 #' @export
-#' 
+#'
 qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
   ## to-do: write functions to calc bayesint and lodint for 100 phenos at one time.
-  
+
   stopifnot(nrow(LOD) == length(pos))
   stopifnot(length(snp) == length(pos))
   stopifnot(nrow(out.qtl) == length(pos))
@@ -16,13 +16,13 @@ qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
 
   LOD <- LOD[, !apply(is.na(LOD), 2, any), drop=FALSE] ## remove the column with NAs.
   n.pheno <- ncol(LOD)
-  
+
   max.lod <- apply(LOD, 2, max, na.rm = TRUE)
   LOD <- LOD[, max.lod >= lod.thr, drop=FALSE] ## remove the column with small LOD score.
   max.lod <- max.lod[max.lod >= lod.thr]
   max.pos <- pos[apply(LOD, 2, which.max)]
   nr <- ncol(LOD)
-  
+
   intv <- matrix(NA, 8, nr)
   for(i.simu in 1:nr){
     out.qtl$lod <- LOD[, i.simu]
@@ -50,7 +50,7 @@ qtlsummary.do <- function(LOD, pos, snp, qtl.pos, lod.thr=3, drop=1.5, out.qtl){
   names(res) <- paste(rep(c("bi","li","bi.ep","li.ep"), 4),
                       rep(c("cover","cover.sd", "width", "width.sd"),each=4),
                       sep=".")
-  
+
   res.loddrop <- lod.drop(pos, snp, LOD, qtl.pos, probs=0.95, lod.thr=lod.thr)
   res <- c(res, res.loddrop)
   res["power"] <- nr/n.pheno
