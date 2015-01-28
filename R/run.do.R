@@ -93,11 +93,12 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   rm(xodat, f.geno.chr, f.genoAH, genoAH)
 
   ########################################################################
+  cc.gen <- findccgen(ped)
   cat("Calculating genoprob...  \n")
   DOQTL::calc.genoprob(data=result$data, chr = qtl.chr, output.dir = output.dir,
                        plot = FALSE, array="other", sampletype="DO",
                        method="allele", snps=snps, founders=result$founders,
-                       write.gp36=write.gp36)
+                       write.gp36=write.gp36, cc.gen=cc.gen)
   remove(result)
 
   cat("QTL mapping...  \n")
