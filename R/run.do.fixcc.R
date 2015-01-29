@@ -14,7 +14,6 @@ run.do.fixcc <- function(para, i.para, j.simu, output.dir="DO.output/", result.d
                    map.whole, qtl.allpos, f.geno.chr, snps, design=c("nosib", "random"),
                    write.gp36=FALSE, cleanup=TRUE){
 
-  method <- match.arg(method)
   design <- match.arg(design)
 
   ## check that the QTLs themself are marker/pseudomarkers.
@@ -41,7 +40,14 @@ run.do.fixcc <- function(para, i.para, j.simu, output.dir="DO.output/", result.d
   tic <- proc.time() ## starting time
 
   cat("Simulating DO Pedigree... \n")
-  ped <- sim_do_pedigree(ngen=n.gen, nkids=n.kids, design=design) ## use default ccgen value
+
+  ## use fixed ccgen value
+  alpha <- c(21, 64, 24, 10, 5, 9, 5, 3, 3)
+  names(alpha) <- 4:12
+  npairs <- sum(alpha)
+  ccgen <- rep(as.numeric(names(alpha)), alpha)
+  ped <- sim_do_pedigree(ngen = n.gen, npairs = npairs, ccgen=ccgen,
+                         nkids_per = n.kids, design = design)
   id <- ped[ped[, "gen"] == n.gen & ped[, "do"] == 1, "id"]
   id <- sample(id, n.sample)
 
