@@ -15,6 +15,7 @@ run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, n.mar.cM=2,
   method <- match.arg(method)
   design <- match.arg(design)
 
+  result.dir <- add.slash(result.dir)
   if(!file.exists(result.dir))   dir.create(result.dir)
 
   stopifnot(colnames(para) == c("n.gen","n.kids","n.sample","h.qtl","h.kin","qtl.pos","seed"))

@@ -19,6 +19,15 @@ run.do.fixcc <- function(para, i.para, j.simu, output.dir="DO.output/", result.d
   ## check that the QTLs themself are marker/pseudomarkers.
   stopifnot(all(qtl.allpos %in% snps$dist))
 
+  output.dir <- add.slash(output.dir)
+  result.dir <- add.slash(result.dir)
+
+  if(file.exists(output.dir) & cleanup){
+    warning(paste0("output.dir \"", output.dir,
+                   "\" already exists, will not cleanup"))
+    cleanup <- FALSE
+  }
+
   if(!file.exists(output.dir))   dir.create(output.dir)
   if(!file.exists(result.dir))   dir.create(result.dir)
 
@@ -112,7 +121,7 @@ run.do.fixcc <- function(para, i.para, j.simu, output.dir="DO.output/", result.d
 
   if(cleanup){
     files <- list.files(output.dir)
-    if(length(files)>0)  file.remove(paste0(output.dir, "/", files))
+    if(length(files)>0)  file.remove(paste0(output.dir, files))
     file.remove(output.dir)
   }
 

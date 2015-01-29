@@ -36,6 +36,15 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   ## check that the QTLs themself are marker/pseudomarkers.
   stopifnot(all(qtl.allpos %in% snps$dist))
 
+  output.dir <- add.slash(output.dir)
+  result.dir <- add.slash(result.dir)
+
+  if(file.exists(output.dir) & cleanup){
+    warning(paste0("output.dir \"", output.dir,
+                   "\" already exists, will not cleanup"))
+    cleanup <- FALSE
+  }
+
   if(!file.exists(output.dir))   dir.create(output.dir)
   if(!file.exists(result.dir))   dir.create(result.dir)
 
@@ -124,7 +133,7 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
 
   if(cleanup){
     files <- list.files(output.dir)
-    if(length(files)>0)  file.remove(paste0(output.dir, "/", files))
+    if(length(files)>0)  file.remove(paste0(output.dir, files))
     file.remove(output.dir)
   }
 
