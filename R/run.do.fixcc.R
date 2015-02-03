@@ -1,36 +1,19 @@
-#' run simulations for DO type experiments
+#' run simulations for DO type experiments, with the same pre-CC
+#' structure as real experiment.
 #'
 #' For a fix set of parameters, generate DO pedigree and simulate
 #' crossovers, randomly generate phenotypes with main QTL and minor
 #' QTLs, then run DOQTL::scanone to do QTL mapping. save LOD score as
 #' a matrix and marker informations to result.dir.
 #'
-#' @param method design method for the pedigree, choose from 'sub2' or 'last2'.
-#' @param para data.frame that saves all the parameter settings for the simulation
-#' @param i.para which setting to use for the current run
-#' @param j.simu which simulation is the currtent run at
-#' @param n.simu number of phenotypes for each qtl position. suggested
-#' to be 1, otherwise the result will be correlated.
-#' @param qtl.chr chromosome for the qtl
-#' @param ochr chromosomes other than qtl.chr, used to estimate kinship matrix
-#' @param n.mqtl number of minor qtls for the polygenic effects
-#' @param map.whole genetic map for all chromosomes
-#' @param qtl.allpos named vector of all candidate qtl positions.
-#' @param f.geno.chr founder genotype for QTL chromosome.
-#' @param snps SNP information saved in a data.frame: name, chr and
-#' position. Only for SNPs on the QTL chromosome.
-#' @param design 'nosib' or 'random'
-#' @param write.gp36 logic value
-#' @param cleanup logic value
+#' @inheritParams run.do
 #'
 #' @export
-run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="DO.output/", result.dir="./",
-                   ## n.gen, n.kids, n.sample, h.qtl, h.kin, allele.freq, seed,
-                   n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10, n.ccgen=15, npairs_small=30, npairs_big=300,
+run.do.fixcc <- function(para, i.para, j.simu, output.dir="DO.output/", result.dir="./",
+                   n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10,
                    map.whole, qtl.allpos, f.geno.chr, snps, design=c("nosib", "random"),
                    write.gp36=FALSE, cleanup=TRUE){
 
-  method <- match.arg(method)
   design <- match.arg(design)
 
   ## check that the QTLs themself are marker/pseudomarkers.
@@ -66,11 +49,16 @@ run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="
   tic <- proc.time() ## starting time
 
   cat("Simulating DO Pedigree... \n")
-  ped <- simcross::sim_do_pedigree_fix_n(ngen=n.gen, nkids=n.kids, nccgen=n.ccgen,
-                                         nsample=n.sample, npairs_small=npairs_small, npairs_big=npairs_big,
-                                         method=method, design=design)
-  id <- attr(ped, "last.gen.id")
-  attr(ped, "last.gen.id") <- NULL
+
+  ## use fixed ccgen value
+  alpha <- c(21, 64, 24, 10, 5, 9, 5, 3, 3)
+  names(alpha) <- 4:12
+  npairs <- sum(alpha)
+  ccgen <- rep(as.numeric(names(alpha)), alpha)
+  ped <- sim_do_pedigree(ngen = n.gen, npairs = npairs, ccgen=ccgen,
+                         nkids_per = n.kids, design = design)
+  id <- ped[ped[, "gen"] == n.gen & ped[, "do"] == 1, "id"]
+  id <- sample(id, n.sample)
 
   while(1){
     cat("Simulating genotypes...  \n")
