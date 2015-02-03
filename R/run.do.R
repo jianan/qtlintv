@@ -5,7 +5,8 @@
 #' QTLs, then run DOQTL::scanone to do QTL mapping. save LOD score as
 #' a matrix and marker informations to result.dir.
 #'
-#' @param method design method for the pedigree, choose from 'sub2' or 'last2'.
+#' @param method design method for the pedigree, choose from 'sub2' or
+#' 'last2' or 'fixcc'.
 #' @param para data.frame that saves all the parameter settings for the simulation
 #' @param i.para which setting to use for the current run
 #' @param j.simu which simulation is the currtent run at
@@ -24,7 +25,8 @@
 #' @param cleanup logic value
 #'
 #' @export
-run.do <- function(method=c("sub2", "last2"), para, i.para, j.simu, output.dir="DO.output/", result.dir="./",
+run.do <- function(method=c("sub2", "last2", "fixcc"), para, i.para, j.simu,
+                   output.dir="DO.output/", result.dir="./",
                    ## n.gen, n.kids, n.sample, h.qtl, h.kin, allele.freq, seed,
                    n.simu=1, qtl.chr=1, ochr=2:19, n.mqtl=10, n.ccgen=15, npairs_small=30, npairs_big=300,
                    map.whole, qtl.allpos, f.geno.chr, snps, design=c("nosib", "random"),
