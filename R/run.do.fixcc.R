@@ -19,17 +19,17 @@ run.do.fixcc <- function(para, i.para, j.simu, output.dir="DO.output/", result.d
   ## check that the QTLs themself are marker/pseudomarkers.
   stopifnot(all(qtl.allpos %in% snps$dist))
 
-  output.dir <- add.slash(output.dir)
   result.dir <- add.slash(result.dir)
+  if(!file.exists(result.dir))   dir.create(result.dir)
 
+  output.dir <- add.slash(output.dir)
   if(file.exists(output.dir) & cleanup){
     warning(paste0("output.dir \"", output.dir,
-                   "\" already exists, will not cleanup"))
+                   "\" already exists, will not cleanup"),
+            immediate.=TRUE)
     cleanup <- FALSE
   }
-
   if(!file.exists(output.dir))   dir.create(output.dir)
-  if(!file.exists(result.dir))   dir.create(result.dir)
 
   ## load("para.do.real.RData")
   n.gen <- para$n.gen[i.para]
