@@ -32,7 +32,7 @@
 run.do.single <- function(
     method=c("sub2", "last2", "fixcc"), para, i.para, i.simu, i.qtlpos,
     output.dir="DO.output/", result.dir="./", n.simu_qtlpos=1, n.simu=10000,
-    qtl.chr=1, ochr=2:19, n.mqtl=10, n.ccgen=15, npairs_small=30, npairs_big=300,
+    qtl.chr=1, ochr=2:19, n.mqtl=10, n.ccgen=15,
     map.whole, qtl.allpos, f.geno.chr, snps, design=c("nosib", "random"),
     selc.method=c("byfamily","byindiv"),
     write.gp36=FALSE, cleanup=TRUE, realpb8=FALSE, noK=FALSE){
@@ -77,7 +77,7 @@ run.do.single <- function(
   cat("Simulating DO Pedigree... \n")
   ped <- simcross::sim_do_pedigree_fix_n(
       ngen=n.gen, nkids=n.kids, nccgen=n.ccgen,
-      nsample=n.sample, npairs_small=npairs_small, npairs_big=npairs_big,
+      nsample=n.sample,
       method=method, design=design, selc.method=selc.method)
   id <- attr(ped, "last.gen.id")
   attr(ped, "last.gen.id") <- NULL

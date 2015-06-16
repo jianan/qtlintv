@@ -11,7 +11,7 @@
 #' @export
 run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, result.dir="./",
                     qtl.chr=1, ochr=2:19, n.mqtl=10,
-                    npairs_small=30, npairs_big=300, design=c("nosib", "random"),
+                    design=c("nosib", "random"),
                     eq.spacing=TRUE, gap.middle=50, step=0.1, n.mar.cM=2){
 
   method <- match.arg(method)
@@ -44,7 +44,7 @@ run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, result.dir=
     ## Simulating AIL Pedigree...
     ped <- simcross::sim_ail_pedigree_fix_n(
         ngen=n.gen, nkids_per=n.kids, nsample_ngen=n.sample,
-        npairs_small=npairs_small, npairs_big=npairs_big, method=method, design=design)
+        method=method, design=design)
     id <- attr(ped, "last.gen.id")
     attr(ped, "last.gen.id") <- NULL
 
