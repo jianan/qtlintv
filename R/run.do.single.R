@@ -27,19 +27,15 @@
 #' mapping.
 #' @param noK do we control for Kinship matrix while mapping.
 #' @param i.qtlpos which candidate qtlpos will be used.
-#' @param n.simu total number of simulations needed.
-#' @param selc.method Method used to select the individuals from last
-#' generation in DO pedigree.
 #'
 #' @export
-run.do <- function(
-    method=c("sub2", "last2", "fixcc"), para, i.para, i.simu,
+run.do.single <- function(
+    method=c("sub2", "last2", "fixcc"), para, i.para, i.simu, i.qtlpos,
     output.dir="DO.output/", result.dir="./", n.simu_qtlpos=1, n.simu=10000,
     qtl.chr=1, ochr=2:19, n.mqtl=10, n.ccgen=15,
     map.whole, qtl.allpos, f.geno.chr, snps, design=c("nosib", "random"),
     selc.method=c("byfamily","byindiv"),
     write.gp36=FALSE, cleanup=TRUE, realpb8=FALSE, noK=FALSE){
-
 
   method <- match.arg(method)
   design <- match.arg(design)
@@ -66,11 +62,13 @@ run.do <- function(
 
   ## check that the QTLs themself are marker/pseudomarkers.
   stopifnot(all(qtl.allpos %in% snps$dist))
+  n.qtlpos <- length(qtl.allpos)
+  stopifnot(all(i.qtlpos <= n.qtlpos))
   stopifnot(i.simu <= n.simu)
 
   set.seed(seed)
-  seeds <- runif(n.simu, 0, 1e+8)
-  set.seed(seeds[i.simu])
+  seeds <- matrix(runif(n.qtlpos*n.simu, 0, 1e+8), n.qtlpos, n.simu)
+  set.seed(seeds[i.qtlpos, i.simu])
 
   allele <- 1:allele.freq
 
@@ -89,9 +87,8 @@ run.do <- function(
     xodat <- sim_from_pedigree_wholechr(pedigree=ped, map.whole)
 
     cat("Generating phenotypes...  \n")
-    ## for each qtl position, generate multiple phenotypes, result is a matrix of n.sample x (n.simu*n.qtlpos)
     pheno <- gen_pheno_do_allqtl(xodat, map.whole, id,
-                                 qtl.chr, qtl.allpos, allele,
+                                 qtl.chr, qtl.allpos[i.qtlpos], allele,
                                  h.qtl, h.kin, n.mqtl, n.simu_qtlpos)
 
     min.sd <- min(apply(pheno, 2, sd))
@@ -144,11 +141,12 @@ run.do <- function(
 
   toc <- proc.time() - tic ## run time
 
+  str.qtlpos <- ifelse(length(i.qtlpos)==1, i.qtlpos, paste0(min(i.qtlpos), "-", max(i.qtlpos)))
   str.noK <- ifelse(noK, "noK","hasK")
   str.realP <- ifelse(realpb8, "realP", "calcP")
   file.result <- paste0(add.slash(result.dir), "result.", str.noK, ".", str.realP, ".",method,
-                        ".para.", i.para, ".simu.", i.simu, ".RData")
-  save(qtl.allpos, pos, snp, LOD, out, toc, file=file.result)
+                        ".para.", i.para, ".simu.", i.simu, ".qtl.", str.qtlpos, ".RData")
+  save(LOD, toc, file=file.result)
 
   if(cleanup){
     files <- list.files(output.dir)

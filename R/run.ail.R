@@ -9,8 +9,10 @@
 #' @inheritParams run.do
 #'
 #' @export
-run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, n.mar.cM=2, result.dir="./",
-                    qtl.chr=1, ochr=2:19, n.mqtl=10, design=c("nosib", "random")){
+run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, result.dir="./",
+                    qtl.chr=1, ochr=2:19, n.mqtl=10,
+                    design=c("nosib", "random"),
+                    eq.spacing=TRUE, gap.middle=50, step=0.1, n.mar.cM=2){
 
   method <- match.arg(method)
   design <- match.arg(design)
@@ -18,15 +20,15 @@ run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, n.mar.cM=2,
   result.dir <- add.slash(result.dir)
   if(!file.exists(result.dir))   dir.create(result.dir)
 
-  stopifnot(colnames(para) == c("n.gen","n.kids","n.sample","h.qtl","h.kin","qtl.pos","seed"))
-  ## load("para.do.real.RData")
+  stopifnot(colnames(para) == c("n.gen","n.kids","n.sample","gap.len",
+                        "qtl.pos","h.qtl","h.kin","seed"))
   n.gen <- para$n.gen[i.para]
   n.kids <- para$n.kids[i.para]
   n.sample <- para$n.sample[i.para]
-  h.qtl <- para$h.qtl[i.para]
-  h.kin <- para$h.kin[i.para]
   gap.len <- para$gap.len[i.para]
   qtl.pos <- para$qtl.pos[i.para]
+  h.qtl <- para$h.qtl[i.para]
+  h.kin <- para$h.kin[i.para]
   seed <- para$seed[i.para]
 
   gap.start <- gap.middle - gap.len/2
@@ -40,14 +42,14 @@ run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, n.mar.cM=2,
 
     cat(i.simu, "/", n.simu, "\n")
     ## Simulating AIL Pedigree...
-    ped <- simcross::sim_ail_pedigree_fix_n(ngen=n.gen, nkids=n.kids,
-                                            nsample=n.sample, npairs_small=30, npairs_big=300,
-                                            method=method, design=design)
+    ped <- simcross::sim_ail_pedigree_fix_n(
+        ngen=n.gen, nkids_per=n.kids, nsample_ngen=n.sample,
+        method=method, design=design)
     id <- attr(ped, "last.gen.id")
     attr(ped, "last.gen.id") <- NULL
 
     ## Generate marker map...
-    map <- gen_map(n.mar.cM=n.mar.cM, gap.chr=gap.chr, gap.start=gap.start, gap.end=gap.end,
+    map <- gen_map(n.mar.cM=n.mar.cM, gap.chr=qtl.chr, gap.start=gap.start, gap.end=gap.end,
                    eq.spacing=eq.spacing)
     map.df <- map_list2df(map)
 
@@ -67,7 +69,7 @@ run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, n.mar.cM=2,
                       to=min(max(map[[qtl.chr]]), gap.end+gap.len/2), by=step)
     if(!(qtl.pos %in% mapdf.chr$dist | qtl.pos %in% pseudo.pos)){
       ## makesure that the QTLs themself are marker/pseudomarkers.
-      pseudo.pos <- c(pseduo.pos, qtl.allpos)
+      pseudo.pos <- c(pseduo.pos, qtl.pos)
     }
     pos <- data.frame(snp=paste0("c", qtl.chr, ".loc", 1:length(pseudo.pos)),
                       chr=qtl.chr, dist=pseudo.pos)
@@ -92,7 +94,8 @@ run.ail <- function(method=c("sub2", "last2"), para, i.para, n.simu, n.mar.cM=2,
   attr(LOD, "snp") <- as.character(pos$snp)
   toc <- proc.time() - tic ## run time
 
-  file.result <- paste0(result.dir, "result.para.", i.para, ".RData")
+  file.result <- paste0(result.dir, "result.", method,
+                        ".para.", i.para, ".RData")
   save(LOD, out.qtl, toc, file=file.result)
 
   return(file.result)
